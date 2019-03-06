@@ -1520,7 +1520,7 @@ class HtmlOldParser extends StatelessWidget {
                   text: node.text,
                   style: parentStyle.merge(TextStyle(
                       fontSize:
-                          parentStyle.fontSize * OFFSET_TAGS_FONT_SIZE_FACTOR)),
+                          parentStyle.fontSize * (OFFSET_TAGS_FONT_SIZE_FACTOR + 0.1))),
                 ),
                 textDirection: TextDirection.ltr);
             painter.layout();
@@ -1536,6 +1536,7 @@ class HtmlOldParser extends StatelessWidget {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Stack(
+                    alignment: Alignment.centerLeft,
                     fit: StackFit.loose,
                     children: [
                       //The Stack needs a non-positioned object for the next widget to respect the space so we create
@@ -1677,7 +1678,19 @@ class HtmlOldParser extends StatelessWidget {
   }
 
   List<Widget> _parseNodeList(List<dom.Node> nodeList) {
-    return nodeList.map((node) {
+    //TODO: check performance or real device, maybe we don't need to always split text. For example, if it's only one level deep text in <p></p>.
+    List<dom.Node> newNodeList = [];
+    nodeList.forEach((node) {
+      if (node is dom.Text) {
+        node.text.split(" ").forEach((text) {
+          newNodeList.add(dom.Text(" " + text));
+        });
+      } else {
+        newNodeList.add(node);
+      }
+    });
+
+    return newNodeList.map((node) {
       return _parseNode(node);
     }).toList();
   }
