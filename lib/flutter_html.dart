@@ -44,7 +44,7 @@ class Html extends StatelessWidget {
       color: backgroundColor,
       width: width,
       constraints: BoxConstraints(
-        maxHeight: maxLines > 0 ? ((textStyle.fontSize + LINE_OFFSET) * maxLines + textStyle.fontSize) : double.infinity
+        maxHeight: maxLines > 0 ? ((textStyle.fontSize + LINE_OFFSET) * maxLines) : double.infinity
       ),
       child: DefaultTextStyle.merge(
         style: textStyle,
